@@ -1,3 +1,3 @@
-name=Chameli
-phone=01756335555
-address=bagha, Rajh
+name=Chameli2
+phone=01756335551
+address=paha,Rajh
