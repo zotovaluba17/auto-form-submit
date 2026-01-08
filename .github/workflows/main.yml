@@ -1,29 +1,43 @@
 name: Auto Form Submit
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:   # হাতে চালানোর জন্য
   push:
-    branches: [ main ]
+    branches: [ main ] # main branch এ push হলে অটো রান
 
 jobs:
   run-form:
     runs-on: ubuntu-latest
 
     steps:
+    # 📥 Repo code আনবে
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
+    # 🐍 Python সেটআপ
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
+    # 📦 Dependency install
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install playwright
         playwright install chromium
 
+    # 🤖 Script রান
     - name: Run form submit script
       run: |
         python form_parallel.py
+
+    # 📄 Logs সংরক্ষণ (সবচেয়ে গুরুত্বপূর্ণ)
+    - name: Upload logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: form-submit-logs
+        path: |
+          success.log
+          failed.log
+          retry.log
