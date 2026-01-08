@@ -45,4 +45,3 @@ jobs:
           success.log
           failed.log
           retry.log
-retention-days: 7
