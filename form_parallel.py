@@ -5,9 +5,10 @@ from datetime import datetime
 # ==============================
 # ⚙️ SETTINGS
 # ==============================
-HEADLESS = True        # False = লাইভ ব্রাউজার দেখা যাবে | True = হাইড
-MAX_RETRY = 2           # failed হলে কয়বার আবার চেষ্টা করবে
-DELAY_AFTER_SUBMIT = 5  # seconds
+HEADLESS = True          # True = fast & hidden
+MAX_RETRY = 2            # failed হলে কয়বার retry
+DELAY_AFTER_SUBMIT = 5   # seconds
+MAX_PARALLEL = 3         # একসাথে কয়টা URL চলবে (SAFE)
 
 # ==============================
 # 📄 LOAD FORM DATA
@@ -27,7 +28,7 @@ ADDRESS = form_data.get("address", "")
 # ==============================
 # 📄 LOAD URLS
 # ==============================
-with open("urls.txt", "r") as f:
+with open("urls.txt", "r", encoding="utf-8") as f:
     URLS = [u.strip() for u in f if u.strip()]
 
 # ==============================
@@ -38,7 +39,7 @@ def log(file, msg):
         f.write(f"[{datetime.now()}] {msg}\n")
 
 # ==============================
-# 🤖 MAIN TASK
+# 🤖 FORM SUBMIT FUNCTION
 # ==============================
 async def submit_form(url, attempt=1):
     try:
@@ -53,7 +54,6 @@ async def submit_form(url, attempt=1):
             await page.fill("#billing_address_1", ADDRESS)
 
             await page.click("#place_order")
-
             await page.wait_for_timeout(DELAY_AFTER_SUBMIT * 1000)
 
             log("success.log", url)
@@ -70,10 +70,16 @@ async def submit_form(url, attempt=1):
             await submit_form(url, attempt + 1)
 
 # ==============================
-# 🚀 RUN
+# 🚀 PARALLEL RUNNER
 # ==============================
 async def main():
-    for url in URLS:
-        await submit_form(url)
+    semaphore = asyncio.Semaphore(MAX_PARALLEL)
+
+    async def limited_submit(url):
+        async with semaphore:
+            await submit_form(url)
+
+    tasks = [limited_submit(url) for url in URLS]
+    await asyncio.gather(*tasks)
 
 asyncio.run(main())
