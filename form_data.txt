@@ -1,3 +1,3 @@
-name=forhad
-phone=01873975166
-address=Koilagat marrystop goli
+name=kaium
+phone=01703443040
+address=mukam tola
