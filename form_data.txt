@@ -1,3 +1,3 @@
-name=সৈয়দ মুস্তাক
-phone=01728210971
-address=চোরিয়া কোনা সৈয়দ বাড়ি
+name=Elias talokder
+phone=01710713556
+address=Andira gram Madhoppor
