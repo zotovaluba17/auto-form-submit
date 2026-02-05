@@ -1,3 +1,3 @@
-name=Shohidul fokir 
-phone=01736189673
-address=Kashipur college More phool kurigram
+name=মীর মারুফ ভান্ডারি
+phone=01605723562
+address=মিয়া বাজার চুয়াডাংগা
