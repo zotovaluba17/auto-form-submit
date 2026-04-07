@@ -8,6 +8,7 @@ on:
 jobs:
   run-form:
     runs-on: ubuntu-latest
+    timeout-minutes: 180
 
     steps:
     - name: Checkout repository
@@ -45,3 +46,5 @@ jobs:
           success.log
           failed.log
           retry.log
+          final_pass.txt
+          final_fail.txt
